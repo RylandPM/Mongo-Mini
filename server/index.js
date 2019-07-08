@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
 
 app.use(express.static(__dirname + "/build"));
@@ -12,7 +13,12 @@ const {
   deleteCustomer
 } = require("./controller/customerController");
 
-const { SERVER_PORT } = process.env;
+const { SERVER_PORT, CONNECTION_STRING } = process.env;
+
+mongoose
+  .connect(CONNECTION_STRING, { useNewUrlParser: true, useCreateIndex: true })
+  .then(() => console.log("mongo connected"))
+  .catch(() => console.log("mongo failed"));
 
 app.get("/api/customer", getAllCustomers);
 
